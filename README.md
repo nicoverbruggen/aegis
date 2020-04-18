@@ -37,6 +37,7 @@ jobs:
     git clone https://github.com/nicoverbruggen/aegis.git
     cd aegis
     composer install
+    mkdir storage
     chmod +x ./aegis
     echo "DROPBOX_ACCESS_TOKEN={your-code-here}" > .env
     touch ./jobs/backup.yaml
