@@ -30,6 +30,11 @@ class BackupOnDropbox extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if (empty(getenv('DROPBOX_ACCESS_TOKEN'))) {
+            $output->writeln("<error>The DROPBOX_ACCESS_TOKEN is missing or empty in your .env file!</error>");
+            return -1;
+        }
+
         $filename = $input->getArgument('file');
         try {
             $aegis = new Aegis($filename);

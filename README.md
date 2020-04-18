@@ -6,8 +6,13 @@ Can also be used standalone as a terminal application.
 
 You can use Aegis in two ways:
 
-* By creating a new instance of Aegis in code and pointing at a YAML file, and running $aegis->
+* By creating a new instance of Aegis in code and pointing at a YAML file, and running `$aegis->run()`
 * By invoking `./aegis backup:local` or `./aegis backup:dropbox` and pointing at a YAML file
+
+## Example usage
+
+    chmod +x ./aegis
+    ./aegis backup:dropbox ./backup.yaml
 
 ## Limitations
 
