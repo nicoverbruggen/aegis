@@ -43,7 +43,7 @@ class Job
         $momentTimestamp = date('Y-m-d_His');
 
         $tempDirectory = __DIR__ . '/../../storage';
-        $tempFile = "{$tempDirectory}/{$momentTimestamp}-{$this->name}.tar";
+        $tempFile = "{$tempDirectory}/{$momentTimestamp}-{$this->name}.tar.gz";
 
         $this->log("- Will create gzipped tar in temporary folder...");
 
@@ -63,7 +63,7 @@ class Job
         $this->log("- Writing stream to {$this->destination_name}...");
 
         $manager->writeStream(
-            "{$this->destination_name}://{$this->destination_path}/{$momentTimestamp}-{$this->name}.tar",
+            "{$this->destination_name}://{$this->destination_path}/{$momentTimestamp}-{$this->name}.tar.gz",
             $stream
         );
 
