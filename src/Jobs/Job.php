@@ -47,9 +47,7 @@ class Job
 
         $this->log("- Will create gzipped tar in temporary folder...");
 
-        // c = create
-        // z = use gzip for compression
-        // f = specify filename
+        // c = create, z = use gzip for compression, f = specify filename
         $command = "cd {$this->source_path} && tar $excludeArguments -czf $tempFile .";
         exec($command);
 
@@ -70,6 +68,11 @@ class Job
         );
 
         $this->log("- [OK] Stream written!");
+
+        if (is_resource($stream)) {
+            fclose($stream);
+        }
+
         $this->log("- Removing temporary file...");
 
         $manager->delete("local://$tempFile");
