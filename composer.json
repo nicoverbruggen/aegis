@@ -1,0 +1,27 @@
+{
+    "name": "nicoverbruggen/aegis",
+    "description": "Simple backup tool that can be invoked by cron",
+    "authors": [
+        {
+            "name": "Nico Verbruggen",
+            "email": "nico.verb@gmail.com"
+        }
+    ],
+    "type": "project",
+    "require": {
+        "nesbot/carbon": "^2.32",
+        "league/flysystem": "^1.0",
+        "spatie/flysystem-dropbox": "^1.2",
+        "symfony/yaml": "^5.0",
+        "symfony/console": "^5.0",
+        "vlucas/phpdotenv": "^4.1",
+        "symfony/var-dumper": "^5.0"
+    },
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Aegis\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}

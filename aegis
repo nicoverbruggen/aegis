@@ -1,0 +1,19 @@
+#!/usr/bin/env php
+
+<?php
+
+require __DIR__.'/vendor/autoload.php';
+
+use Symfony\Component\Console\Application;
+
+$dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
+$dotenv->load();
+
+$application = new Application();
+$application->setName("Aegis Backup");
+$application->setVersion("1.0 (codename SEES)");
+
+$application->add(new \Aegis\Commands\BackupLocally());
+$application->add(new \Aegis\Commands\BackupOnDropbox());
+
+$application->run();
