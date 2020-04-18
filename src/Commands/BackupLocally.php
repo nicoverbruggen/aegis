@@ -10,7 +10,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class BackupLocally extends Command
 {
-    protected static string $defaultName = 'backup:locally';
+    protected static $defaultName = 'backup:locally';
 
     protected function configure()
     {

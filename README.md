@@ -2,6 +2,9 @@
 PHP package built to back up a locally tarred directory to a remote filesystem instance.
 Can also be used standalone as a terminal application.
 
+## System requirements
+* PHP 7.4 or higher
+
 ## Usage
 You can use Aegis in two ways:
 
@@ -31,6 +34,9 @@ jobs:
 
 ## Example usage
 
+    git clone https://github.com/nicoverbruggen/aegis.git
+    cd aegis
+    composer install
     chmod +x ./aegis
     echo "DROPBOX_ACCESS_TOKEN={your-code-here}" > .env
     touch ./jobs/backup.yaml

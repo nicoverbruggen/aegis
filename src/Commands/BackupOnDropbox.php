@@ -13,7 +13,7 @@ use Symfony\Component\Console\Input\InputArgument;
 
 class BackupOnDropbox extends Command
 {
-    protected static string $defaultName = 'backup:dropbox';
+    protected static $defaultName = 'backup:dropbox';
 
     protected function configure()
     {
