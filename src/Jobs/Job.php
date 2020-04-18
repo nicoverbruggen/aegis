@@ -29,7 +29,7 @@ class Job
     private function log($message)
     {
         if ($this->output != null) {
-            $this->output->writeln($message);
+            $this->output->writeln(date('Y/m/d H:i:s') . " | " . $message);
         }
     }
 
@@ -45,14 +45,16 @@ class Job
         $tempDirectory = __DIR__ . '/../../storage';
         $tempFile = "{$tempDirectory}/{$momentTimestamp}-{$this->name}.tar";
 
+        $this->log("- Will create gzipped tar in temporary folder...");
+
         // c = create
         // z = use gzip for compression
         // f = specify filename
         $command = "cd {$this->source_path} && tar $excludeArguments -czf $tempFile .";
         exec($command);
 
-        $this->log("- gzipped tar created in temporary folder");
-        $this->log("- opening stream");
+        $this->log("- [OK] Gzipped tar created in temporary folder!");
+        $this->log("- Opening stream to temporary file...");
 
         $stream = $manager->readStream("local://$tempFile");
 
@@ -60,17 +62,19 @@ class Job
             throw new \Exception("Stream could not be read.");
         }
 
-        $this->log("- writing stream...");
+        $this->log("- Writing stream to {$this->destination_name}...");
 
         $manager->writeStream(
             "{$this->destination_name}://{$this->destination_path}/{$momentTimestamp}-{$this->name}.tar",
             $stream
         );
 
-        $this->log("- stream written; will remove temporary file");
+        $this->log("- [OK] Stream written!");
+        $this->log("- Removing temporary file...");
 
         $manager->delete("local://$tempFile");
 
-        $this->log("- temp file has been removed");
+        $this->log("- [OK] Temporary file has been removed!");
+        $this->log("Job {$this->name} complete!");
     }
 }

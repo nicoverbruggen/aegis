@@ -1,5 +1,5 @@
 # Aegis
-A package built to back up a locally tarred directory to a remote filesystem instance.
+PHP package built to back up a locally tarred directory to a remote filesystem instance.
 Can also be used standalone as a terminal application.
 
 ## Usage
