@@ -48,7 +48,7 @@ Set up the configuration as seen in the documentation, and then run:
 
 ## Limitations
 
-* In the current version, Aegis can only backup a directory on the local filesystem.
+* In the current version, Aegis can only back up a directory on the local filesystem.
 * There are no checks to see if enough space remains on the filesystem.
 * You must provide an absolute path for the source (or override the `local` filesystem instance).
 * No cleanup occurs, so you have to clean up your destination. (The storage folder gets cleaned up after creating the tarball.)

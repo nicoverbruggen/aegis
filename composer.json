@@ -4,11 +4,12 @@
     "authors": [
         {
             "name": "Nico Verbruggen",
-            "email": "nico.verb@gmail.com"
+            "email": "mail@nicoverbruggen.be"
         }
     ],
     "type": "project",
     "require": {
+        "php": "^8.0|^8.1",
         "nesbot/carbon": "^2.32",
         "league/flysystem": "^1.0",
         "spatie/flysystem-dropbox": "^1.2",
