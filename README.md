@@ -42,26 +42,32 @@ Notice that in this example file, the destination name is `nextcloud`, which mea
 
 ### Local
 
-No extra environment variables are needed.
+For Dropbox, set the access token first. You will need to authorize a separate app, which will normally write to its own app directory. Set the following keys in `.env`:
 
-Create a job in the YAML file. The destination name should be `local`, but the path can be customized.
+    DROPBOX_ACCESS_TOKEN=
+
+Create one or more jobs in the YAML file, with a destination name of `dropbox`. The path can be customized.
 
 When done, run the following command:
 
 ```
-./aegis backup:local <path-to-yaml>
+./aegis backup:dropbox <path-to-yaml>
 ```
 
 ### Nextcloud
 
-No extra environment variables are needed.
+For Nextcloud, set the WebDAV credentials first. You may need to make a separate app password. Set the following keys in `.env`:
 
-Create a job in the YAML file. The destination name should be `local`, but the path can be customized.
+    NEXTCLOUD_BASE_URI=
+    NEXTCLOUD_USERNAME=
+    NEXTCLOUD_PASSWORD=
+
+Create one or more jobs in the YAML file, with a destination name of `nextcloud`. The path can be customized.
 
 When done, run the following command:
 
 ```
-./aegis backup:local <path-to-yaml>
+./aegis backup:nextcloud <path-to-yaml>
 ```
 
 ## Getting started
@@ -75,27 +81,13 @@ When done, run the following command:
     chmod +x ./aegis
     touch .env
 
-### NextCloud
+For more information about how to configure Aegis to work with Dropbox or Nextcloud, please see **Example usage** above.
 
-For NextCloud, set the WebDAV credentials. You will need to make a separate app password:
-
-    NEXTCLOUD_BASE_URI=
-    NEXTCLOUD_USERNAME=
-    NEXTCLOUD_PASSWORD=
-
-### Dropbox
-
-For Dropbox, set the access token. You will need to authorize a separate app, which will normally write to its own app directory:
-
-    DROPBOX_ACCESS_TOKEN=
-
-### Running backups
-
-Finally, create the backup configuration file (YAML). You can place this file wherever you want, but for this example we're storing it in `./jobs`. (You can find an example above.)
+Finally, create the backup configuration file (YAML). You can place this file wherever you want, but for this example we're storing it in `./jobs`. You can find an example above.
 
     touch ./jobs/backup.yaml
 
-Set up the configuration as seen in the documentation, and then run the relevant command(s) (which ones to run depends on your jobs):
+Set up the `.env` configuration file as seen in the documentation, and then run the relevant command(s). Which one(s) to run depends on your jobs.
 
     ./aegis backup:nextcloud ./jobs/backup.yaml
     ./aegis backup:dropbox ./jobs/backup.yaml
