@@ -4,44 +4,49 @@ namespace Aegis\Commands;
 
 use Aegis\Aegis;
 use League\Flysystem\Filesystem;
-use Spatie\Dropbox\Client;
-use Spatie\FlysystemDropbox\DropboxAdapter;
+use League\Flysystem\WebDAV\WebDAVAdapter;
+use Sabre\DAV\Client;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use function Aegis\config;
 
-class BackupOnDropbox extends Command
+class NextCloudBackup extends Command
 {
-    protected static $defaultName = 'backup:dropbox';
+    protected static $defaultName = 'backup:nextcloud';
 
     protected function configure()
     {
-        $this->setDescription("Runs a Dropbox backup job.");
+        $this->setDescription("Runs all NextCloud backup jobs.");
         $this->addArgument('file', InputArgument::REQUIRED);
     }
 
-    private function getDropboxFilesystem(): Filesystem
+    private function getNextcloudFileSystem(): Filesystem
     {
-        $client = new Client(getenv('DROPBOX_ACCESS_TOKEN'));
-        $adapter = new DropboxAdapter($client);
+        $client = new Client([
+            'baseUri' => config('NEXTCLOUD_BASE_URI'),
+            'userName' => config('NEXTCLOUD_USERNAME'),
+            'password' => config('NEXTCLOUD_PASSWORD'),
+            'authType' => Client::AUTH_BASIC
+        ]);
+
+        $adapter = new WebDAVAdapter($client, 'remote.php/webdav/');
+
         return new Filesystem($adapter, ['case_sensitive' => false]);
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        if (empty(getenv('DROPBOX_ACCESS_TOKEN'))) {
-            $output->writeln("<error>The DROPBOX_ACCESS_TOKEN is missing or empty in your .env file!</error>");
-            return -1;
-        }
-
         $filename = $input->getArgument('file');
+
         try {
             $aegis = new Aegis($filename);
-            $aegis->registerFilesystem('dropbox', $this->getDropboxFilesystem());
-            $aegis->run($output);
+            $aegis->registerFilesystem('nextcloud', $this->getNextcloudFileSystem());
+            $aegis->run($output, 'nextcloud');
         } catch (\Exception $ex) {
             $output->writeln("<error>{$ex->getMessage()}</error>");
+            $output->writeln("{$ex->getTraceAsString()}");
             return -1;
         }
 

@@ -2,7 +2,7 @@
 
 namespace Aegis;
 
-use League\Flysystem\Adapter\Local;
+use League\Flysystem\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\MountManager;
 use Aegis\Jobs\JobParser;
@@ -13,7 +13,6 @@ class Aegis
 {
     private array $jobs;
     private array $filesystems;
-    private MountManager $manager;
 
     /**
      * Aegis constructor.
@@ -22,26 +21,35 @@ class Aegis
      */
     public function __construct($filename)
     {
-        $this->manager = new MountManager();
         $this->jobs = (new JobParser($filename))->getJobs();
-
-        $this->registerFilesystem(
-            'local',
-            new Filesystem(new Local('/'))
-        );
+        $this->registerFilesystem('local', new Filesystem(new Local\LocalFilesystemAdapter('/')));
     }
 
-    public function registerFilesystem(string $name, Filesystem $filesystem)
+    public function registerFilesystem(string $name, Filesystem $filesystem): void
     {
-        $this->filesystems[] = $name;
-        $this->manager->mountFilesystem($name, $filesystem);
+        $this->filesystems[$name] = $filesystem;
     }
 
-    public function run(?OutputInterface $output = null) : bool
-    {
+    public function run(
+        ?OutputInterface $output = null,
+        string $filter = 'local'
+    ) : bool {
+        // Get all jobs
+        $jobCount = count($this->jobs);
+        $output->writeln("Parsed {$jobCount} jobs.");
+
+        // Filter so only the desired type is executed
+        $this->jobs = array_filter($this->jobs, fn ($job) => $job->getDriverName() == $filter);
+        $jobCount = count($this->jobs);
+
+        // Keep track of how many jobs must be executed
+        $output->writeln("{$jobCount} jobs are valid for: `$filter`.");
+
         /** @var Job $job */
         foreach ($this->jobs as $job) {
-            $job->execute($this->manager, $output);
+            if (in_array($job->getDriverName(), array_keys($this->filesystems))) {
+                $job->execute($this->filesystems, $output);
+            }
         }
 
         return true;

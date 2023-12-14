@@ -2,7 +2,7 @@
 
 namespace Aegis\Jobs;
 
-use League\Flysystem\MountManager;
+use League\Flysystem\Filesystem;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class Job
@@ -12,7 +12,7 @@ class Job
     private string $source_path;
     private array $exclude;
 
-    private string $destination_name;
+    public string $destination_name;
     private string $destination_path;
 
     private ?OutputInterface $output = null;
@@ -26,14 +26,30 @@ class Job
         $this->destination_path = $yaml->destination['path'];
     }
 
-    private function log($message)
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getDriverName(): string
+    {
+        return $this->destination_name;
+    }
+
+    private function log($message): void
     {
         if ($this->output != null) {
             $this->output->writeln(date('Y/m/d H:i:s') . " | " . $message);
         }
     }
 
-    public function execute(MountManager $manager, ?OutputInterface $output)
+    /**
+     * @param array<string, Filesystem> $filesystems
+     * @param OutputInterface|null $output
+     * @return void
+     * @throws \Exception|\League\Flysystem\FilesystemException
+     */
+    public function execute(array $filesystems, ?OutputInterface $output): void
     {
         $this->output = $output;
 
@@ -54,7 +70,7 @@ class Job
         $this->log("- [OK] Gzipped tar created in temporary folder!");
         $this->log("- Opening stream to temporary file...");
 
-        $stream = $manager->readStream("local://$tempFile");
+        $stream = $filesystems['local']->readStream($tempFile);
 
         if ( !$stream) {
             throw new \Exception("Stream could not be read.");
@@ -62,10 +78,7 @@ class Job
 
         $this->log("- Writing stream to {$this->destination_name}...");
 
-        $manager->writeStream(
-            "{$this->destination_name}://{$this->destination_path}/{$momentTimestamp}-{$this->name}.tar.gz",
-            $stream
-        );
+        $filesystems[$this->destination_name]->writeStream("{$this->destination_path}/{$momentTimestamp}-{$this->name}.tar.gz", $stream);
 
         $this->log("- [OK] Stream written!");
 
@@ -75,7 +88,7 @@ class Job
 
         $this->log("- Removing temporary file...");
 
-        $manager->delete("local://$tempFile");
+        $filesystems['local']->delete("$tempFile");
 
         $this->log("- [OK] Temporary file has been removed!");
         $this->log("Job {$this->name} complete!");

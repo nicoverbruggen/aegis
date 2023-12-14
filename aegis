@@ -11,9 +11,10 @@ $dotenv->load();
 
 $application = new Application();
 $application->setName("Aegis Backup");
-$application->setVersion("1.0 (codename SEES)");
+$application->setVersion("2.0 (codename Nox Aeternum)");
 
-$application->add(new \Aegis\Commands\BackupLocally());
-$application->add(new \Aegis\Commands\BackupOnDropbox());
+$application->add(new \Aegis\Commands\LocalBackup());
+$application->add(new \Aegis\Commands\DropboxBackup());
+$application->add(new \Aegis\Commands\NextCloudBackup());
 
 $application->run();

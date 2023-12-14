@@ -8,7 +8,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 
-class BackupLocally extends Command
+class LocalBackup extends Command
 {
     protected static $defaultName = 'backup:locally';
 
@@ -24,9 +24,10 @@ class BackupLocally extends Command
 
         try {
             $aegis = new Aegis($filename);
-            $aegis->run($output);
+            $aegis->run($output, 'local');
         } catch (\Exception $ex) {
             $output->writeln("<error>{$ex->getMessage()}</error>");
+            $output->writeln("<error>{$ex->getTraceAsString()}</error>");
             return -1;
         }
 
