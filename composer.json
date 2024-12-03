@@ -16,7 +16,7 @@
         "symfony/yaml": "^5.0",
         "symfony/console": "^5.0",
         "vlucas/phpdotenv": "^4.1",
-        "symfony/var-dumper": "^5.0",
+        "symfony/var-dumper": "^6.4",
         "league/flysystem-webdav": "^3.0"
     },
     "license": "MIT",
