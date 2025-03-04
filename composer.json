@@ -10,14 +10,14 @@
     "type": "project",
     "require": {
         "php": "^8.3",
-        "nesbot/carbon": "^2.32",
-        "league/flysystem": "^3.0",
-        "spatie/flysystem-dropbox": "^2.0",
-        "symfony/yaml": "^5.0",
-        "symfony/console": "^5.0",
-        "vlucas/phpdotenv": "^4.1",
-        "symfony/var-dumper": "^5.0",
-        "league/flysystem-webdav": "^3.0"
+        "nesbot/carbon": "^2.73",
+        "league/flysystem": "^3.29.1",
+        "spatie/flysystem-dropbox": "^2.0.6",
+        "symfony/yaml": "^5.4.45",
+        "symfony/console": "^5.4.47",
+        "vlucas/phpdotenv": "^4.3",
+        "symfony/var-dumper": "^5.4.48",
+        "league/flysystem-webdav": "^3.29"
     },
     "license": "MIT",
     "autoload": {
